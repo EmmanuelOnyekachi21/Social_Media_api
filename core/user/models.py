@@ -55,6 +55,8 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
 
         return user
+
+
 class User(AbstractBaseUser, PermissionsMixin):
     public_id = models.UUIDField(
         db_index=True, unique=True, default=uuid.uuid4, editable=False
@@ -68,6 +70,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
+    
+    bio = models.TextField(null=True)
+    avatar = models.ImageField(null=True)
+    
+    
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
