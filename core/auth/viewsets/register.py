@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
-from core.auth.serializers.register import RegisterSerializer
+from core.auth.serializers import RegisterSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 
 
