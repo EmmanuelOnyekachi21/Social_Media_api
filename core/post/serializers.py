@@ -36,3 +36,10 @@ class PostSerializer(AbstractSerializer):
         rep['author'] = UserSerializer(author).data
         return rep
     
+    def update(self, instance, validated_data):
+        if not instance.edited:
+            validated_data['edited'] = True
+        
+        instance = super().update(instance, validated_data)
+        return instance
+    
