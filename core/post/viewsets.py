@@ -4,6 +4,7 @@ from core.post.models import Post
 from core.post.serializers import PostSerializer
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.decorators import action
 
 
 class PostViewSet(AbstractViewSet):
@@ -29,3 +30,37 @@ class PostViewSet(AbstractViewSet):
             serializer.data, 
             status=status.HTTP_201_CREATED
         )
+    
+    @action(methods=['post'], detail=True)
+    def like(self, request, *args, **kwargs):
+        """
+        POST /posts/{pk}/like/
+        Custom action to like a post.
+        Uses @action decorator with detail=True because
+        it targets a single object (e.g., post with id=5).
+        """
+        post = self.get_object() # Retrieves the Post to like
+        user = self.request.user
+        user.like(post)
+        serializer = self.get_serializer(post)
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK
+        )
+    
+    @action(methods=['post'], detail=True)
+    def remove_like(self, request, *args, **kwargs):
+        """
+        POST /posts/{pk}/remove_like/
+        Custom action to unlike (remove like from) a post.
+        """
+        post = self.get_object()
+        user = self.request.user
+        user.remove_like(post)
+        serializer = self.get_serializer(post)
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK
+        )
+        
+        

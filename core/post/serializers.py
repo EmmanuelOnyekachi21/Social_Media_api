@@ -22,11 +22,28 @@ class PostSerializer(AbstractSerializer):
             )
         return value
     
+    liked = serializers.SerializerMethodField()
+    likes_count = serializers.SerializerMethodField()
+    
+    def get_liked(self, obj):
+        # Get the request object from the context
+        request = self.context.get('request', None)
+        
+        # If user sending request is anonymous, return false
+        if request.user.is_anonymous or request is None:
+            return False
+        
+        # Check if user has liked this post
+        return request.user.has_liked(obj)
+    
+    def get_likes_count(self, obj):
+        return obj.liked_by.count()
+    
     class Meta:
         model = Post
         fields = [
             'id', 'author', 'body', 'edited',
-            'created', 'updated'
+            'created', 'updated', 'liked', 'likes_count'
         ]
         read_only_fields = ['edited']
     
