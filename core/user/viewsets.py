@@ -3,6 +3,7 @@ from rest_framework import viewsets
 from core.user.serializer import UserSerializer
 from core.user.models import User
 from core.abstract.viewsets import AbstractViewSet
+from core.auth.permissions import UserPermission
 
 
 class UserViewset(AbstractViewSet):
